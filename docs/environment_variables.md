@@ -40,6 +40,8 @@ Valid values: a comma-separated list of hostnames/urls
 
 `NO_PROXY` disables the proxy for specific urls
 
+IPv6 addresses can be written with or without brackets, such as `[::1]` or `::1`.
+
 ```bash
 export HTTP_PROXY=http://my-external-proxy.com:1234
 export NO_PROXY=http://127.0.0.1,python-httpx.org
