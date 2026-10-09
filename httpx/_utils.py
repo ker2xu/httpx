@@ -68,6 +68,12 @@ def get_environment_proxies() -> dict[str, str | None]:
                 mounts[f"all://{hostname}"] = None
             elif is_ipv6_hostname(hostname):
                 mounts[f"all://[{hostname}]"] = None
+            elif (
+                hostname.startswith("[")
+                and hostname.endswith("]")
+                and is_ipv6_hostname(hostname[1:-1])
+            ):
+                mounts[f"all://{hostname}"] = None
             elif hostname.lower() == "localhost":
                 mounts[f"all://{hostname}"] = None
             else:

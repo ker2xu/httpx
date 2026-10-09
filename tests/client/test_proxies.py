@@ -153,6 +153,38 @@ def test_unsupported_proxy_scheme():
             {"ALL_PROXY": "http://localhost:123", "NO_PROXY": "127.0.0.1"},
             None,
         ),
+        # Bracketed IPv6 bypasses matching hosts without affecting other hosts.
+        (
+            "http://[::1]:8000",
+            {"ALL_PROXY": "http://localhost:123", "NO_PROXY": "[::1]"},
+            None,
+        ),
+        (
+            "https://[2001:db8::1]",
+            {"ALL_PROXY": "http://localhost:123", "no_proxy": "[2001:db8::1]"},
+            None,
+        ),
+        (
+            "http://[::2]",
+            {"ALL_PROXY": "http://localhost:123", "NO_PROXY": "[::1]"},
+            "http://localhost:123",
+        ),
+        (
+            "http://127.0.0.1",
+            {
+                "ALL_PROXY": "http://localhost:123",
+                "NO_PROXY": "localhost,127.0.0.1,::1,[::1]",
+            },
+            None,
+        ),
+        (
+            "https://example.com",
+            {
+                "ALL_PROXY": "http://localhost:123",
+                "NO_PROXY": "localhost,127.0.0.1,::1,[::1]",
+            },
+            "http://localhost:123",
+        ),
         # Proxied if NO_PROXY scheme does not match URL.
         (
             "http://127.0.0.1",
